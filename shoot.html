@@ -258,6 +258,10 @@
                                 <span id="sim-weapon-status" class="text-amber-400 font-semibold">В коробке</span>
                             </div>
                             <div class="flex items-center justify-between">
+                                <span class="text-slate-400">Патроны:</span>
+                                <span id="sim-ammo-count" class="text-amber-400 font-bold">— / —</span>
+                            </div>
+                            <div class="flex items-center justify-between">
                                 <span class="text-slate-400">Врагов осталось:</span>
                                 <span id="sim-enemy-count" class="text-cyan-400 font-bold">4</span>
                             </div>
@@ -265,25 +269,25 @@
                                 <span class="text-slate-400">Уничтожено:</span>
                                 <span id="sim-kills-count" class="text-rose-400 font-bold">0</span>
                             </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-slate-400">Патроны:</span>
-                                <span id="sim-ammo-count" class="text-amber-400 font-bold">—</span>
-                            </div>
                         </div>
                     </div>
 
-                    <div class="absolute top-4 right-4 bg-slate-900/80 backdrop-blur border border-slate-700/60 px-4 py-3 rounded-xl text-xs pointer-events-none z-10 space-y-1.5 min-w-[190px]">
+                    <div class="absolute top-4 right-4 bg-slate-900/80 backdrop-blur border border-slate-700/60 px-4 py-3 rounded-xl text-xs pointer-events-none z-10 space-y-1.5 min-w-[220px]">
                         <div class="text-slate-400 uppercase tracking-wider font-bold">Боевой режим</div>
                         <div class="flex items-center justify-between gap-3">
                             <span class="text-slate-300">Огонь:</span>
                             <span id="sim-fire-status" class="text-amber-400 font-semibold">Сначала подбери оружие</span>
                         </div>
                         <div class="flex items-center justify-between gap-3">
+                            <span class="text-slate-300">Визуал выстрела:</span>
+                            <span class="text-cyan-400 font-semibold">Трассер + луч</span>
+                        </div>
+                        <div class="flex items-center justify-between gap-3">
                             <span class="text-slate-300">Цели:</span>
                             <span class="text-white font-semibold">Капсулы</span>
                         </div>
                         <div class="text-[11px] text-slate-500 pt-1 border-t border-slate-700/60">
-                            Наведите перекрестие в центр капсулы и нажмите ЛКМ.
+                            Наведите перекрестие в центр капсулы и нажмите ЛКМ — вы увидите яркий трассер и короткий луч до точки попадания.
                         </div>
                     </div>
 
@@ -301,22 +305,20 @@
                     <!-- Success Message Overlay -->
                     <div id="sim-success-msg" class="absolute top-12 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-slate-950 px-6 py-3 rounded-2xl font-bold shadow-2xl shadow-emerald-500/30 flex items-center gap-3 transition-all duration-300 opacity-0 scale-90 pointer-events-none z-20">
                         <i class="fa-solid fa-circle-check text-xl"></i>
-                        <span>Оружие в руках! Жми ЛКМ, чтобы стрелять по капсулам.</span>
+                        <span>Оружие в руках! Теперь выстрел виден — ЛКМ рисует трассер и луч до цели.</span>
                     </div>
 
                     <!-- Ammo HUD bottom-right -->
                     <div id="sim-ammo-hud" class="absolute bottom-4 right-4 bg-slate-900/85 backdrop-blur border border-slate-700/60 px-5 py-3 rounded-xl pointer-events-none z-10 flex items-center gap-3 transition-all duration-200 opacity-0">
-                        <i class="fa-solid fa-gun text-slate-500 text-lg"></i>
+                        <i class="fa-solid fa-crosshairs text-emerald-400 text-lg"></i>
                         <div class="flex items-baseline gap-1">
-                            <span id="sim-ammo-big" class="text-3xl font-black text-white tabular-nums leading-none">30</span>
-                            <span class="text-slate-500 text-sm font-bold">/ 30</span>
+                            <span id="sim-ammo-current" class="text-white font-extrabold text-2xl tabular-nums">30</span>
+                            <span class="text-slate-500 font-bold text-base">/</span>
+                            <span id="sim-ammo-reserve" class="text-slate-400 font-bold text-base tabular-nums">90</span>
                         </div>
-                    </div>
-
-                    <!-- No ammo warning -->
-                    <div id="sim-no-ammo" class="absolute bottom-20 left-1/2 transform -translate-x-1/2 bg-rose-500/90 text-white px-5 py-2 rounded-xl font-bold text-sm shadow-lg shadow-rose-500/30 flex items-center gap-2 transition-all duration-200 opacity-0 scale-90 pointer-events-none z-20">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        <span>Магазин пуст! Нажмите [R] для перезарядки</span>
+                        <div id="sim-reload-label" class="ml-2 text-xs text-amber-400 font-bold uppercase tracking-wider hidden">
+                            Перезарядка...
+                        </div>
                     </div>
 
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
@@ -360,6 +362,13 @@
                         <div>
                             <h4 class="font-bold text-white text-sm mb-1">Враги-капсулы</h4>
                             <p class="text-xs text-slate-400">На арене стоят простые капсульные враги. Наводитесь по центру и проверяйте механику стрельбы и урона.</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700/40 flex items-start gap-3 md:col-span-2 xl:col-span-2">
+                        <i class="fa-solid fa-wave-square text-2xl text-cyan-400 mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-white text-sm mb-1">Видимый выстрел</h4>
+                            <p class="text-xs text-slate-400">В симуляторе выстрел теперь рисуется как короткий энергетический луч и летящий светящийся трассер. В Unity это обычно делают через <strong>LineRenderer</strong>, <strong>TrailRenderer</strong> или префаб пули.</p>
                         </div>
                     </div>
                 </div>
@@ -474,6 +483,20 @@
                                         <input type="number" id="cfg-fire-rate" oninput="generateScript()" value="0.15" step="0.01" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500 transition">
                                     </div>
                                 </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-xs text-slate-400 mb-1">Патронов в магазине</label>
+                                        <input type="number" id="cfg-mag-size" oninput="generateScript()" value="30" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500 transition">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs text-slate-400 mb-1">Запас патронов</label>
+                                        <input type="number" id="cfg-max-ammo" oninput="generateScript()" value="90" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500 transition">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs text-slate-400 mb-1">Время перезарядки</label>
+                                        <input type="number" id="cfg-reload-time" oninput="generateScript()" value="1.5" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500 transition">
+                                    </div>
+                                </div>
                                 <div class="bg-slate-900/60 border border-slate-700/50 rounded-xl p-3 text-xs text-slate-400 leading-relaxed">
                                     Генератор ниже создаст сразу набор скриптов: <span class="text-white font-semibold">подбор оружия</span>, <span class="text-white font-semibold">стрельба рейкастом</span> и <span class="text-white font-semibold">враг-капсула с HP</span>.
                                 </div>
@@ -544,7 +567,7 @@
                         <span class="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold uppercase tracking-wider">Гайд по настройке сцены</span>
                         <h3 class="text-2xl sm:text-3xl font-extrabold text-white">Как настроить коробку, стрельбу и врагов в Unity 3D</h3>
                         <p class="text-slate-300 text-sm sm:text-base">
-                            Даже самый лучший скрипт не сработает, если сцена настроена неверно. Выполните эти 5 простых шагов для рабочей механики подбора, стрельбы и урона по капсульным врагам.
+                            Даже самый лучший скрипт не сработает, если сцена настроена неверно. Выполните эти 6 простых шагов для рабочей механики подбора, стрельбы, видимого выстрела и урона по капсульным врагам.
                         </p>
                     </div>
 
@@ -621,6 +644,8 @@
                                 <li>В поле <code class="text-rose-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">Player Weapon</code> перетащите ваше отключенное оружие из рук игрока (`WeaponHolder -> Rifle`).</li>
                                 <li>На боевую модель оружия в руках добавьте <code class="text-rose-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">SimpleWeaponShooter.cs</code>.</li>
                                 <li>В поле <code class="text-rose-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">Player Camera</code> укажите `MainCamera`, чтобы рейкаст летел из центра экрана.</li>
+                                <li>Создайте на конце ствола пустой объект <code class="text-rose-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">MuzzlePoint</code> и перетащите его в соответствующее поле у `SimpleWeaponShooter`.</li>
+                                <li>Если хотите видимый лазер, добавьте <code class="text-rose-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">LineRenderer</code> и назначьте его в поле <code class="text-rose-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">Shot Line</code>.</li>
                                 <li>В поле <code class="text-rose-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">Pickup Prompt</code> (если используете UI) перетащите Canvas с текстом «Нажмите E».</li>
                             </ul>
                         </div>
@@ -642,6 +667,25 @@
                                 <li>При желании добавьте дочерний Canvas с полоской HP или просто меняйте цвет материала при попадании.</li>
                                 <li>Поставьте несколько капсул на разных расстояниях, чтобы проверить точность, урон и дальность стрельбы.</li>
                                 <li>Запустите сцену: подберите оружие, наведите центр экрана на капсулу и стреляйте. Если капсула исчезает после нескольких попаданий — всё настроено правильно.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-6 relative overflow-hidden shadow-lg">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/10 rounded-bl-full flex items-start justify-end p-6 text-cyan-400 font-black text-2xl pointer-events-none">
+                            #6
+                        </div>
+                        <h4 class="text-lg font-bold text-white mb-3 flex items-center gap-2 text-cyan-400">
+                            <i class="fa-solid fa-burst"></i> Шаг 6: Сделайте выстрел видимым — лазер, трассер или пуля
+                        </h4>
+                        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                            <p>Если урон проходит, но игрок не видит сам выстрел, это нормальная проблема для чистого <strong>raycast</strong>. Нужно добавить визуализацию выстрела.</p>
+                            <ul class="list-disc list-inside space-y-2 text-slate-300 ml-2">
+                                <li><strong class="text-white">Самый простой вариант — лазер через LineRenderer:</strong> создайте дочерний объект <code class="text-cyan-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">MuzzlePoint</code> на стволе и подключите <code class="text-cyan-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">LineRenderer</code>, который кратко рисуется от ствола до точки попадания.</li>
+                                <li><strong class="text-white">Более «живой» вариант — трассер:</strong> используйте маленький префаб с <code class="text-cyan-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">TrailRenderer</code>, который быстро пролетает от оружия к цели. Урон всё ещё можно считать рейкастом, а трассер нужен только для красоты.</li>
+                                <li><strong class="text-white">Физическая пуля:</strong> если хотите реальный снаряд, создайте префаб пули с <code class="text-cyan-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">Rigidbody</code> и Collider. Это уже не просто визуал — нужно отдельно учитывать скорость, столкновения и lifetime.</li>
+                                <li><strong class="text-white">Что рекомендую для старта:</strong> оставьте <code class="text-cyan-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">raycast</code> для урона и добавьте <code class="text-cyan-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">LineRenderer</code> или <code class="text-cyan-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-bold">TrailRenderer</code> для видимого выстрела. Так проще всего получить ощущение, что оружие действительно стреляет.</li>
                             </ul>
                         </div>
                     </div>
@@ -726,6 +770,20 @@
                         </div>
                     </div>
 
+                    <!-- Issue 6 -->
+                    <div class="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-5 space-y-3">
+                        <div class="flex items-center gap-3 text-cyan-400 font-bold text-base">
+                            <i class="fa-solid fa-wave-square text-xl"></i>
+                            <span>6. Урон есть, но сам выстрел не видно</span>
+                        </div>
+                        <div class="text-sm text-slate-300 space-y-2 pl-7 border-l-2 border-cyan-500/30 ml-2">
+                            <p><strong class="text-white">Причина:</strong> Raycast сам по себе считается мгновенно и не рисует лазер, пулю или трассер. Поэтому кажется, будто оружие «стреляет воздухом».</p>
+                            <p><strong class="text-white">Решение 1:</strong> Добавьте <code class="text-cyan-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-mono">LineRenderer</code> от точки ствола до точки попадания и включайте его на 0.03–0.08 секунды.</p>
+                            <p><strong class="text-white">Решение 2:</strong> Используйте маленький префаб трассера с <code class="text-cyan-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-mono">TrailRenderer</code>, который быстро летит по уже рассчитанному лучу.</p>
+                            <p><strong class="text-white">Решение 3:</strong> Добавьте <code class="text-cyan-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-mono">muzzleFlash</code> на конце ствола и <code class="text-cyan-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-mono">hitEffectPrefab</code> в точке попадания — даже этого уже достаточно, чтобы оружие ощущалось живым.</p>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Interactive Help Box -->
@@ -735,7 +793,7 @@
                             <i class="fa-solid fa-headset text-emerald-400"></i> Нужна дополнительная помощь по скриптам?
                         </h4>
                         <p class="text-sm text-slate-300 max-w-xl">
-                            Вы можете модифицировать сгенерированный код под любую архитектуру (например, для инвентаря на ScriptableObjects или мультиплеера Photon/Netcode).
+                            Вы можете модифицировать сгенерированный код под любую архитектуру: добавить LineRenderer-лазер, TrailRenderer-трассер, физические пули, UI попаданий, инвентарь на ScriptableObjects или мультиплеер Photon/Netcode.
                         </p>
                     </div>
                     <button onclick="switchTab('generator')" class="px-6 py-3 rounded-xl unity-gradient text-slate-950 font-bold hover:opacity-95 transition whitespace-nowrap cursor-pointer shadow-lg shadow-emerald-500/20">
@@ -831,6 +889,9 @@
             const damage = document.getElementById('cfg-damage').value || "25";
             const fireDistance = document.getElementById('cfg-range').value || "100";
             const fireRate = document.getElementById('cfg-fire-rate').value || "0.15";
+            const magSize = document.getElementById('cfg-mag-size').value || "30";
+            const maxAmmo = document.getElementById('cfg-max-ammo').value || "90";
+            const reloadTime = document.getElementById('cfg-reload-time').value || "1.5";
 
             const floatOptionsDiv = document.getElementById('floating-options');
             if (isFloating) {
@@ -843,6 +904,9 @@
 
             let code = `// Разделите этот код на 3 отдельных файла в Unity:
 // WeaponPickupFromBox.cs, SimpleWeaponShooter.cs, CapsuleEnemy.cs
+//
+// Важно: если хотите, чтобы выстрел был виден, добавьте к оружию MuzzlePoint,
+// LineRenderer или TrailRenderer. Ниже в SimpleWeaponShooter уже есть пример для лазерной линии.
 
 // =====================================================
 // 1) WeaponPickupFromBox.cs
@@ -946,38 +1010,84 @@ public class WeaponPickupFromBox : MonoBehaviour
 // 2) SimpleWeaponShooter.cs
 // Повесьте на оружие в руках игрока или на WeaponHolder
 // =====================================================
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SimpleWeaponShooter : MonoBehaviour
 {
     [Header("Ссылки")]
     [SerializeField] private Camera playerCamera;
+    [Tooltip("Точка на конце ствола, откуда будет рисоваться видимый выстрел")]
+    [SerializeField] private Transform muzzlePoint;
 
     [Header("Стрельба")]
     [SerializeField] private KeyCode fireKey = ${fireKey};
+    [SerializeField] private KeyCode reloadKey = KeyCode.R;
     [SerializeField] private float fireRate = ${fireRate}f;
     [SerializeField] private float fireDistance = ${fireDistance}f;
     [SerializeField] private int damage = ${damage};
     [SerializeField] private LayerMask hitMask = ~0;
 
+    [Header("Патроны")]
+    [SerializeField] private int magSize = ${magSize};
+    [SerializeField] private int maxReserveAmmo = ${maxAmmo};
+    [SerializeField] private float reloadTime = ${reloadTime}f;
+
+    [Header("UI Патронов (необязательно)")]
+    [Tooltip("Text или TMP_Text для отображения патронов, например '30 / 90'")]
+    [SerializeField] private Text ammoText;
+
     [Header("Эффекты")]
     [SerializeField] private ParticleSystem muzzleFlash;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip shootClip;
+    [SerializeField] private AudioClip reloadClip;
     [SerializeField] private GameObject hitEffectPrefab;
 
+    [Header("Видимый выстрел")]
+    [Tooltip("Лазерная линия выстрела. Добавьте LineRenderer и отключите его на старте")]
+    [SerializeField] private LineRenderer shotLine;
+    [SerializeField] private float shotLineDuration = 0.05f;
+
+    private int currentAmmo;
+    private int reserveAmmo;
     private float nextFireTime;
+    private bool isReloading;
 
     private void Awake()
     {
         if (playerCamera == null)
             playerCamera = Camera.main;
+
+        if (shotLine != null)
+            shotLine.enabled = false;
+    }
+
+    private void Start()
+    {
+        currentAmmo = magSize;
+        reserveAmmo = maxReserveAmmo;
+        UpdateAmmoUI();
     }
 
     private void Update()
     {
+        if (isReloading) return;
+
+        if (Input.GetKeyDown(reloadKey) && currentAmmo < magSize && reserveAmmo > 0)
+        {
+            StartCoroutine(ReloadRoutine());
+            return;
+        }
+
         if (Input.GetKey(fireKey) && Time.time >= nextFireTime)
         {
+            if (currentAmmo <= 0)
+            {
+                if (reserveAmmo > 0) StartCoroutine(ReloadRoutine());
+                return;
+            }
             Shoot();
         }
     }
@@ -985,6 +1095,8 @@ public class SimpleWeaponShooter : MonoBehaviour
     private void Shoot()
     {
         nextFireTime = Time.time + fireRate;
+        currentAmmo--;
+        UpdateAmmoUI();
 
         if (muzzleFlash != null)
             muzzleFlash.Play();
@@ -993,8 +1105,12 @@ public class SimpleWeaponShooter : MonoBehaviour
             audioSource.PlayOneShot(shootClip);
 
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        Vector3 hitPoint = ray.origin + ray.direction * fireDistance;
+
         if (Physics.Raycast(ray, out RaycastHit hit, fireDistance, hitMask))
         {
+            hitPoint = hit.point;
+
             CapsuleEnemy enemy = hit.collider.GetComponentInParent<CapsuleEnemy>();
             if (enemy != null)
             {
@@ -1007,6 +1123,47 @@ public class SimpleWeaponShooter : MonoBehaviour
                 Destroy(hitFx, 2f);
             }
         }
+
+        if (shotLine != null && muzzlePoint != null)
+        {
+            StartCoroutine(ShowShotLine(muzzlePoint.position, hitPoint));
+        }
+    }
+
+    private IEnumerator ShowShotLine(Vector3 startPoint, Vector3 endPoint)
+    {
+        shotLine.enabled = true;
+        shotLine.positionCount = 2;
+        shotLine.SetPosition(0, startPoint);
+        shotLine.SetPosition(1, endPoint);
+
+        yield return new WaitForSeconds(shotLineDuration);
+
+        shotLine.enabled = false;
+    }
+
+    private IEnumerator ReloadRoutine()
+    {
+        isReloading = true;
+
+        if (reloadClip != null && audioSource != null)
+            audioSource.PlayOneShot(reloadClip);
+
+        yield return new WaitForSeconds(reloadTime);
+
+        int needed = magSize - currentAmmo;
+        int toLoad = Mathf.Min(needed, reserveAmmo);
+        currentAmmo += toLoad;
+        reserveAmmo -= toLoad;
+
+        isReloading = false;
+        UpdateAmmoUI();
+    }
+
+    private void UpdateAmmoUI()
+    {
+        if (ammoText != null)
+            ammoText.text = currentAmmo + " / " + reserveAmmo;
     }
 }
 
@@ -1121,6 +1278,9 @@ public class CapsuleEnemy : MonoBehaviour
             document.getElementById('cfg-damage').value = "25";
             document.getElementById('cfg-range').value = "100";
             document.getElementById('cfg-fire-rate').value = "0.15";
+            document.getElementById('cfg-mag-size').value = "30";
+            document.getElementById('cfg-max-ammo').value = "90";
+            document.getElementById('cfg-reload-time').value = "1.5";
             generateScript();
         }
 
@@ -1142,9 +1302,75 @@ public class CapsuleEnemy : MonoBehaviour
         let enemyHitMeshes = [];
         let simLastShotTime = 0;
         let simMessageTimeout;
-        const SIM_MAX_AMMO = 30;
-        let simAmmo = SIM_MAX_AMMO;
-        let simIsReloading = false;
+
+        // --- AMMO SYSTEM ---
+        const AMMO_MAG_SIZE = 30;
+        const AMMO_RESERVE_MAX = 90;
+        let ammoInMag = AMMO_MAG_SIZE;
+        let ammoReserve = AMMO_RESERVE_MAX;
+        let isReloading = false;
+
+        function updateAmmoHud() {
+            const currentEl = document.getElementById('sim-ammo-current');
+            const reserveEl = document.getElementById('sim-ammo-reserve');
+            const miniEl = document.getElementById('sim-ammo-count');
+            if (currentEl) currentEl.textContent = String(ammoInMag);
+            if (reserveEl) reserveEl.textContent = String(ammoReserve);
+            if (miniEl) miniEl.textContent = ammoInMag + ' / ' + ammoReserve;
+
+            if (currentEl) {
+                if (ammoInMag === 0) {
+                    currentEl.className = 'text-rose-400 font-extrabold text-2xl tabular-nums';
+                } else if (ammoInMag <= 5) {
+                    currentEl.className = 'text-amber-400 font-extrabold text-2xl tabular-nums';
+                } else {
+                    currentEl.className = 'text-white font-extrabold text-2xl tabular-nums';
+                }
+            }
+            if (miniEl) {
+                if (ammoInMag === 0) {
+                    miniEl.className = 'text-rose-400 font-bold';
+                } else if (ammoInMag <= 5) {
+                    miniEl.className = 'text-amber-400 font-bold';
+                } else {
+                    miniEl.className = 'text-emerald-400 font-bold';
+                }
+            }
+        }
+
+        function reloadWeapon() {
+            if (isReloading) return;
+            if (ammoInMag >= AMMO_MAG_SIZE) return;
+            if (ammoReserve <= 0) {
+                showSimulatorMessage('Нет запасных патронов!');
+                return;
+            }
+
+            isReloading = true;
+            const reloadLabel = document.getElementById('sim-reload-label');
+            if (reloadLabel) reloadLabel.classList.remove('hidden');
+            playReloadSound();
+
+            setTimeout(() => {
+                const needed = AMMO_MAG_SIZE - ammoInMag;
+                const toLoad = Math.min(needed, ammoReserve);
+                ammoInMag += toLoad;
+                ammoReserve -= toLoad;
+                isReloading = false;
+                if (reloadLabel) reloadLabel.classList.add('hidden');
+                updateAmmoHud();
+                playPickupSound();
+            }, 1200);
+        }
+
+        function resetAmmo() {
+            ammoInMag = AMMO_MAG_SIZE;
+            ammoReserve = AMMO_RESERVE_MAX;
+            isReloading = false;
+            const reloadLabel = document.getElementById('sim-reload-label');
+            if (reloadLabel) reloadLabel.classList.add('hidden');
+            updateAmmoHud();
+        }
 
         function createWeaponMesh() {
             const gunGroup = new THREE.Group();
@@ -1239,50 +1465,6 @@ public class CapsuleEnemy : MonoBehaviour
             const killsEl = document.getElementById('sim-kills-count');
             if (enemyCountEl) enemyCountEl.textContent = String(alive);
             if (killsEl) killsEl.textContent = String(kills);
-        }
-
-        function updateAmmoHud() {
-            const ammoBig = document.getElementById('sim-ammo-big');
-            const ammoSmall = document.getElementById('sim-ammo-count');
-            if (ammoBig) ammoBig.textContent = String(simAmmo);
-            if (ammoSmall) ammoSmall.textContent = simAmmo + ' / ' + SIM_MAX_AMMO;
-
-            if (ammoBig) {
-                if (simAmmo <= 5 && simAmmo > 0) {
-                    ammoBig.className = 'text-3xl font-black text-rose-400 tabular-nums leading-none';
-                } else if (simAmmo === 0) {
-                    ammoBig.className = 'text-3xl font-black text-rose-500 tabular-nums leading-none animate-pulse';
-                } else {
-                    ammoBig.className = 'text-3xl font-black text-white tabular-nums leading-none';
-                }
-            }
-            if (ammoSmall) {
-                ammoSmall.className = simAmmo <= 5 ? 'text-rose-400 font-bold' : 'text-amber-400 font-bold';
-            }
-        }
-
-        function reloadWeapon() {
-            if (simIsReloading || !isWeaponPickedUp || simAmmo === SIM_MAX_AMMO) return;
-            simIsReloading = true;
-
-            const noAmmoEl = document.getElementById('sim-no-ammo');
-            if (noAmmoEl) { noAmmoEl.style.opacity = '0'; noAmmoEl.style.transform = 'translate(-50%, 10px) scale(0.9)'; }
-
-            playReloadSound();
-            showSimulatorMessage('Перезарядка...');
-
-            if (weaponInHand) {
-                gsap.to(weaponInHand.position, { y: -0.6, duration: 0.25, ease: 'power2.in', onComplete: () => {
-                    gsap.to(weaponInHand.position, { y: -0.25, duration: 0.3, ease: 'power2.out' });
-                }});
-            }
-
-            setTimeout(() => {
-                simAmmo = SIM_MAX_AMMO;
-                simIsReloading = false;
-                updateAmmoHud();
-                showSimulatorMessage('Магазин полон! ' + SIM_MAX_AMMO + ' патронов.');
-            }, 800);
         }
 
         function showSimulatorMessage(message) {
@@ -1457,6 +1639,7 @@ public class CapsuleEnemy : MonoBehaviour
                 if (key === 'e' && isNearBox && !isWeaponPickedUp) {
                     executePickup();
                 }
+
                 if (key === 'r' && isWeaponPickedUp) {
                     reloadWeapon();
                 }
@@ -1591,14 +1774,11 @@ public class CapsuleEnemy : MonoBehaviour
             fireStatus.textContent = 'Готово';
             fireStatus.className = 'text-emerald-400 font-bold';
 
-            simAmmo = SIM_MAX_AMMO;
-            simIsReloading = false;
-            updateAmmoHud();
-
+            resetAmmo();
             const ammoHud = document.getElementById('sim-ammo-hud');
             if (ammoHud) ammoHud.style.opacity = '1';
 
-            showSimulatorMessage('Оружие в руках! Жми ЛКМ, чтобы стрелять по капсулам.');
+            showSimulatorMessage('Оружие в руках! Теперь выстрел виден: ЛКМ — трассер и луч до цели.');
             createParticleExplosion(weaponInBox.position.clone(), 0x10b981, 45, 0.08);
         }
 
@@ -1619,20 +1799,17 @@ public class CapsuleEnemy : MonoBehaviour
         }
 
         function shootWeapon() {
-            if (!isWeaponPickedUp || !simRaycaster || !simCamera || simIsReloading) return;
-
-            if (simAmmo <= 0) {
-                const noAmmoEl = document.getElementById('sim-no-ammo');
-                if (noAmmoEl) { noAmmoEl.style.opacity = '1'; noAmmoEl.style.transform = 'translate(-50%, 0) scale(1)'; }
-                playEmptySound();
+            if (!isWeaponPickedUp || !simRaycaster || !simCamera) return;
+            if (isReloading) return;
+            if (ammoInMag <= 0) {
+                reloadWeapon();
                 return;
             }
-
             const now = performance.now();
             if (now - simLastShotTime < 160) return;
             simLastShotTime = now;
 
-            simAmmo--;
+            ammoInMag--;
             updateAmmoHud();
 
             playShootSound();
@@ -1695,20 +1872,59 @@ public class CapsuleEnemy : MonoBehaviour
         }
 
         function createTracer(start, end, isHit) {
-            const geometry = new THREE.BufferGeometry().setFromPoints([start, end]);
-            const material = new THREE.LineBasicMaterial({
-                color: isHit ? 0x10b981 : 0xffffff,
-                transparent: true,
-                opacity: 0.95
-            });
-            const line = new THREE.Line(geometry, material);
-            simScene.add(line);
+            if (!simScene) return;
 
-            setTimeout(() => {
-                simScene.remove(line);
-                geometry.dispose();
-                material.dispose();
-            }, 70);
+            const direction = new THREE.Vector3().subVectors(end, start);
+            const length = direction.length();
+            const midPoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+            const color = isHit ? 0x22d3ee : 0xffffff;
+
+            // 1) Короткий заметный луч
+            const beamGeometry = new THREE.CylinderGeometry(0.018, 0.018, length, 10);
+            const beamMaterial = new THREE.MeshBasicMaterial({
+                color,
+                transparent: true,
+                opacity: 0.85
+            });
+            const beam = new THREE.Mesh(beamGeometry, beamMaterial);
+            beam.position.copy(midPoint);
+            beam.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.clone().normalize());
+            simScene.add(beam);
+
+            // 2) Светящийся трассер, который реально летит до цели
+            const tracerGeometry = new THREE.SphereGeometry(0.045, 12, 12);
+            const tracerMaterial = new THREE.MeshBasicMaterial({
+                color: isHit ? 0x10b981 : 0xf8fafc,
+                transparent: true,
+                opacity: 1
+            });
+            const tracer = new THREE.Mesh(tracerGeometry, tracerMaterial);
+            tracer.position.copy(start);
+            simScene.add(tracer);
+
+            gsap.to(tracer.position, {
+                x: end.x,
+                y: end.y,
+                z: end.z,
+                duration: 0.08,
+                ease: 'none',
+                onComplete: () => {
+                    simScene.remove(tracer);
+                    tracerGeometry.dispose();
+                    tracerMaterial.dispose();
+                }
+            });
+
+            gsap.to(beamMaterial, {
+                opacity: 0,
+                duration: 0.12,
+                ease: 'power1.out',
+                onComplete: () => {
+                    simScene.remove(beam);
+                    beamGeometry.dispose();
+                    beamMaterial.dispose();
+                }
+            });
         }
 
         function resetSimulation() {
@@ -1736,15 +1952,6 @@ public class CapsuleEnemy : MonoBehaviour
             fireStatus.textContent = 'Сначала подбери оружие';
             fireStatus.className = 'text-amber-400 font-semibold';
 
-            simAmmo = SIM_MAX_AMMO;
-            simIsReloading = false;
-            const ammoHud = document.getElementById('sim-ammo-hud');
-            const noAmmoEl = document.getElementById('sim-no-ammo');
-            const ammoSmall = document.getElementById('sim-ammo-count');
-            if (ammoHud) ammoHud.style.opacity = '0';
-            if (noAmmoEl) { noAmmoEl.style.opacity = '0'; noAmmoEl.style.transform = 'translate(-50%, 10px) scale(0.9)'; }
-            if (ammoSmall) { ammoSmall.textContent = '—'; ammoSmall.className = 'text-amber-400 font-bold'; }
-
             playerGroup.position.set(0, 1.6, 4);
             playerGroup.rotation.y = 0;
             simCamera.rotation.x = 0;
@@ -1755,6 +1962,14 @@ public class CapsuleEnemy : MonoBehaviour
             if (boxColliderMesh) boxColliderMesh.material.opacity = 0.2;
 
             resetCapsuleEnemies();
+            resetAmmo();
+            const ammoHud = document.getElementById('sim-ammo-hud');
+            if (ammoHud) ammoHud.style.opacity = '0';
+            const miniAmmo = document.getElementById('sim-ammo-count');
+            if (miniAmmo) {
+                miniAmmo.textContent = '— / —';
+                miniAmmo.className = 'text-amber-400 font-bold';
+            }
             playResetSound();
         }
 
@@ -1834,53 +2049,27 @@ public class CapsuleEnemy : MonoBehaviour
             }
         }
 
-        function playEmptySound() {
+        function playReloadSound() {
             try {
                 const ctx = getAudioContext();
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(120, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.06);
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.12);
+                osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.25);
+
                 gain.gain.setValueAtTime(0.12, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.06);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start();
-                osc.stop(ctx.currentTime + 0.06);
-            } catch (e) { console.log(e); }
-        }
-
-        function playReloadSound() {
-            try {
-                const ctx = getAudioContext();
-                const t = ctx.currentTime;
-
-                const osc1 = ctx.createOscillator();
-                const gain1 = ctx.createGain();
-                osc1.type = 'sine';
-                osc1.frequency.setValueAtTime(300, t);
-                osc1.frequency.exponentialRampToValueAtTime(500, t + 0.1);
-                gain1.gain.setValueAtTime(0.15, t);
-                gain1.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
-                osc1.connect(gain1);
-                gain1.connect(ctx.destination);
-                osc1.start(t);
-                osc1.stop(t + 0.15);
-
-                const osc2 = ctx.createOscillator();
-                const gain2 = ctx.createGain();
-                osc2.type = 'sine';
-                osc2.frequency.setValueAtTime(500, t + 0.25);
-                osc2.frequency.exponentialRampToValueAtTime(800, t + 0.4);
-                gain2.gain.setValueAtTime(0.01, t);
-                gain2.gain.setValueAtTime(0.15, t + 0.25);
-                gain2.gain.exponentialRampToValueAtTime(0.01, t + 0.45);
-                osc2.connect(gain2);
-                gain2.connect(ctx.destination);
-                osc2.start(t + 0.25);
-                osc2.stop(t + 0.45);
-            } catch (e) { console.log(e); }
+                osc.stop(ctx.currentTime + 0.3);
+            } catch (e) {
+                console.log(e);
+            }
         }
 
         function playResetSound() {
